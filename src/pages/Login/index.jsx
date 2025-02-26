@@ -1,11 +1,12 @@
 import "./style.css"
 import { FaUser, FaLock } from "react-icons/fa"
 import { useState } from "react"
-import api from '../../services/api'
+import UserServices from '../../services/api'
 import { useNavigate } from "react-router-dom"
 
 function Login() {
 
+  const api = new UserServices()
   const navigate = useNavigate()
   const [statusCode, setStatusCode] = useState("")
   const [login, setLogin] = useState({
@@ -36,16 +37,11 @@ function Login() {
   async function handleLogin(e) {
     e.preventDefault()
     setStatusCode("")
-    await api.post("/login", login)
-      .then((response) => {
-        setStatusCode(response.status)
-        if (response.status == 200) {
-          navigate("/home")
-        }
-      })
-      .catch((error) => {
-        setStatusCode(error.response.status)
-      })
+    const response = await api.login(login)
+    setStatusCode(response)
+    if (response == 200) {
+      navigate("/home")
+    }
   }
 
   return (
@@ -53,8 +49,8 @@ function Login() {
       <form onSubmit={handleLogin}>
         <h1>Login</h1>
 
-        {formFields.map((field) => (
-          <div className="input-field" key={field.name}>
+        {formFields.map((field, index) => (
+          <div className="input-field" key={index}>
             <input value={field.value} placeholder={field.placeholder} name={field.name} type={field.type} onChange={field.func} />
             {field.icon}
           </div>
