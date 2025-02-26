@@ -1,12 +1,17 @@
-import React from 'react';
-import Routering from './routes'
 import UserServices from '../services/api'
+import { useNavigate } from 'react-router-dom';
 
 const userService = new UserServices();
 
-const ProtectedRoutes = ({children}) => {
+const ProtectedRoutes = ({ children }) => {
+
+  const navigate = useNavigate();
   const usuarioAutenticado = userService.usuarioAutenticado()
-  return usuarioAutenticado ? children : <Routering/>
+  if (!usuarioAutenticado) {
+    navigate('/login');
+    return null;
+  }
+  return children;
 }
- 
+
 export default ProtectedRoutes;

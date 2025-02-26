@@ -28,8 +28,10 @@ export default class UserServices {
         const headers = response.headers;
         if (statusCode == 200) {
             const token = headers['authorization'] || headers['Authorization'];
-            localStorage.setItem("nome", data.name)
+            localStorage.setItem("name", data.name)
             localStorage.setItem("email", data.email)
+            localStorage.setItem("userid", data.id)
+            localStorage.setItem("age", data.age)
             localStorage.setItem("token", token)
         }
         return statusCode
@@ -40,8 +42,10 @@ export default class UserServices {
     }
 
     async logout() {
-        localStorage.removeItem("token")
-        localStorage.removeItem("nome")
+        localStorage.removeItem("name")
         localStorage.removeItem("email")
+        localStorage.removeItem("userid")
+        localStorage.removeItem("age")
+        localStorage.removeItem("token")
     }
 }

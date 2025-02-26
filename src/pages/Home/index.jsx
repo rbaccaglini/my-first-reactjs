@@ -2,10 +2,12 @@ import { useEffect, useState, useRef } from 'react'
 import './style.css'
 import Trash from '../../assets/trash.svg'
 import UserServices from '../../services/api'
+import { useNavigate } from 'react-router-dom';
 
 function Home() {
 
   const api = new UserServices()
+  const navigate = useNavigate();
 
   const [users, setUsers] = useState([])
   const [errMessage, setErrMessage] = useState("")
@@ -53,6 +55,12 @@ function Home() {
     setForm({ ...formData, [name]: value })
   }
 
+  function logout() {
+    api.logout()
+    navigate('/login');
+    return null;
+  }
+
   const formFields = [
     {
       placeholder: "Nome",
@@ -93,6 +101,7 @@ function Home() {
             <input key={index} placeholder={field.placeholder} name={field.name} type={field.type} value={field.value} onChange={field.func} />
           ))}
           <button type="button" onClick={createUser} >Cadastrar</button>
+          <button type="button" onClick={logout} >Sair</button>
           {errMessage == "" ? "" :
             <div className="error">
               {errMessage}
