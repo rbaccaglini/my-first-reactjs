@@ -3,6 +3,9 @@ import { FaUser, FaLock } from "react-icons/fa"
 import { useState } from "react"
 import UserServices from '../../services/api'
 import { useNavigate } from "react-router-dom"
+import Button from "../../components/button"
+import Input from "../../components/input"
+import ErrorBoundary from '../../components/errorBoundary'
 
 function Login() {
 
@@ -48,22 +51,18 @@ function Login() {
     <div className="login-container">
       <form onSubmit={handleLogin}>
         <h1>Login</h1>
-
-        {formFields.map((field, index) => (
-          <div className="input-field" key={index}>
-            <input value={field.value} placeholder={field.placeholder} name={field.name} type={field.type} onChange={field.func} />
-            {field.icon}
-          </div>
-        ))}
+        <ErrorBoundary>
+          <Input fields={formFields} />
+        </ErrorBoundary>
 
         <div className="recall-forget">
           <label>
             <input type="checkbox" /> Lembre de mim
           </label>
-          <a href="#">Esqueceu a senha?</a>
+          <a href="/">Esqueceu a senha?</a>
         </div>
 
-        <button type="submit">Efetura Login</button>
+        <Button type="submit" label="Efetura Login !!" />
 
         {statusCode == "" || statusCode == 200 ? ""
           : <div className="error-message">
@@ -73,7 +72,7 @@ function Login() {
 
         <div className="signup-link">
           <p>
-            Não tem uma conta? <a href="#">Cadastre-se</a>
+            Não tem uma conta? <a href="/">Cadastre-se</a>
           </p>
         </div>
 
