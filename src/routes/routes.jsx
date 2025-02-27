@@ -6,19 +6,24 @@ import Home from '../pages/Home'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 const Routering = () => {
-  return ( 
-    <Router>
-      <Routes>
-        <Route path="*" element={<Login/>} />
-        <Route path="/home" element={
-          <ProtectedRoutes>
-            <Home/>
-          </ProtectedRoutes>
-          } 
-        />
-      </Routes>
-    </Router>
-   );
+	return (
+		<Router>
+			<Routes>
+				<Route
+					path='*'
+					element={<Login />}
+				/>
+				<Route
+					path='/home'
+					element={
+						<ProtectedRoutes>
+							<Home />
+						</ProtectedRoutes>
+					}
+				/>
+			</Routes>
+		</Router>
+	)
 }
- 
-export default Routering;
+
+export default Routering

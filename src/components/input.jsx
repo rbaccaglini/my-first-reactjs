@@ -6,7 +6,7 @@ const Input = ({ fields }) => {
 			{fields.map((field) => (
 				<div
 					className='input-field'
-					key={JSON.stringify(field)}
+					key={field.name}
 				>
 					<input
 						type={field.type || 'text'}
@@ -27,8 +27,7 @@ Input.propTypes = {
 		Proptypes.shape({
 			type: Proptypes.string.isRequired,
 			name: Proptypes.string.isRequired,
-			value: Proptypes.oneOfType([Proptypes.string, Proptypes.number])
-				.isRequired,
+			value: Proptypes.oneOfType([Proptypes.string, Proptypes.number]).isRequired,
 			placeholder: Proptypes.string,
 			icon: Proptypes.element,
 			func: Proptypes.func.isRequired,

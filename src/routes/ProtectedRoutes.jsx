@@ -1,25 +1,25 @@
 import UserServices from '../services/api'
-import { useNavigate } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'
+import PropTypes from 'prop-types'
+import { useEffect } from 'react'
 
-const userService = new UserServices();
+const userService = new UserServices()
 
 const ProtectedRoutes = ({ children }) => {
-  const navigate = useNavigate();
-  const isAuthenticated = userService.usuarioAutenticado()
-  console.log("Test: ", isAuthenticated);
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate('/')
-    }
-  }, [isAuthenticated, navigate])
+	const navigate = useNavigate()
+	const isAuthenticated = userService.usuarioAutenticado()
+	console.log('Test: ', isAuthenticated)
+	useEffect(() => {
+		if (!isAuthenticated) {
+			navigate('/')
+		}
+	}, [isAuthenticated, navigate])
 
-  return isAuthenticated ? children : null
+	return isAuthenticated ? children : null
 }
 
 ProtectedRoutes.propTypes = {
-  children: PropTypes.node.isRequired
+	children: PropTypes.node.isRequired,
 }
 
-export default ProtectedRoutes;
+export default ProtectedRoutes

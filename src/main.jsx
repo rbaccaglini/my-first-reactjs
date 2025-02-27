@@ -4,7 +4,7 @@ import './index.css'
 import Routering from './routes/routes'
 
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <Routering />
-  </StrictMode>,
+	<StrictMode>
+		<Routering />
+	</StrictMode>,
 )

@@ -4,6 +4,8 @@ import Trash from '../../assets/trash.svg'
 import UserServices from '../../services/api'
 import { useNavigate } from 'react-router-dom'
 import Input from '../../components/input'
+import Button from '../../components/button'
+import UserCard from '../../components/usercard'
 import ErrorBoundary from '../../components/errorBoundary'
 
 function Home() {
@@ -104,55 +106,30 @@ function Home() {
 					<h1>Cadastro de Usuários</h1>
 					<ErrorBoundary>
 						<Input fields={formFields} />
+
+						<Button
+							type='button'
+							label='Cadastrar'
+							func={createUser}
+						/>
+
+						<Button
+							type='button'
+							label='Sair'
+							func={logout}
+							cssName='logout-bt'
+						/>
 					</ErrorBoundary>
-					<button
-						type='button'
-						onClick={createUser}
-					>
-						Cadastrar
-					</button>
-					<button
-						type='button'
-						onClick={logout}
-					>
-						Sair
-					</button>
-					{errMessage == '' ? (
-						''
-					) : (
-						<div className='error'>{errMessage}</div>
-					)}
+					{errMessage == '' ? '' : <div className='error'>{errMessage}</div>}
 				</form>
 			</div>
 
 			<div className='right'>
-				{users.map((user) => (
-					<div
-						key={user.id}
-						className='card'
-					>
-						<div>
-							<p>
-								Nome: <span>{user.name}</span>{' '}
-							</p>
-							<p>
-								Idade: <span>{user.age}</span>{' '}
-							</p>
-							<p>
-								Email: <span>{user.email}</span>{' '}
-							</p>
-						</div>
-						<button
-							type='button'
-							onClick={() => deleteUser(user.id)}
-						>
-							<img
-								src={Trash}
-								alt=''
-							/>
-						</button>
-					</div>
-				))}
+				<UserCard
+					users={users}
+					func={deleteUser}
+					img={Trash}
+				/>
 			</div>
 		</div>
 	)
