@@ -1,24 +1,24 @@
 * {
-  box-sizing: border-box;
-  font-family: "Poppins", serif;
-  text-shadow: #000 1px 1px;
-  color: #fff;
+	box-sizing: border-box;
+	font-family: 'Poppins', serif;
+	text-shadow: #000 1px 1px;
+	color: #fff;
 }
 
 body {
-    background: linear-gradient(180deg, #363467, 100%, rgba(30,29,79,0.8) 100%);
-    justify-content: center;
-    align-items: center;
-    min-height: 90vh;
-    background-size: cover;
-    background-position: center;
+	background: linear-gradient(180deg, #363467, 100%, rgba(30, 29, 79, 0.8) 100%);
+	justify-content: center;
+	align-items: center;
+	min-height: 90vh;
+	background-size: cover;
+	background-position: center;
 }
 
 #root {
-  justify-content: center;
-  align-items: center;
-  min-height: 90vh;
-  background: linear-gradient(180deg, #363467, 100%, rgba(30,29,79,0.8) 100%);
-  background-size: cover;
-  background-position: center;
+	justify-content: center;
+	align-items: center;
+	min-height: 90vh;
+	background: linear-gradient(180deg, #363467, 100%, rgba(30, 29, 79, 0.8) 100%);
+	background-size: cover;
+	background-position: center;
 }
