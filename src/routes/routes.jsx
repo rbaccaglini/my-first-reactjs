@@ -1,7 +1,7 @@
-import React from 'react'
 import Login from '../pages/Login'
 import ProtectedRoutes from '../routes/ProtectedRoutes'
-import Home from '../pages/Home'
+
+import List from '../pages/List'
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
@@ -14,10 +14,10 @@ const Routering = () => {
 					element={<Login />}
 				/>
 				<Route
-					path='/home'
+					path='/list'
 					element={
 						<ProtectedRoutes>
-							<Home />
+							<List />
 						</ProtectedRoutes>
 					}
 				/>

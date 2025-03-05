@@ -8,7 +8,6 @@ const userService = new UserServices()
 const ProtectedRoutes = ({ children }) => {
 	const navigate = useNavigate()
 	const isAuthenticated = userService.usuarioAutenticado()
-	console.log('Test: ', isAuthenticated)
 	useEffect(() => {
 		if (!isAuthenticated) {
 			navigate('/')

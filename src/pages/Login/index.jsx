@@ -3,9 +3,10 @@ import { FaUser, FaLock } from 'react-icons/fa'
 import { useState } from 'react'
 import UserServices from '../../services/api'
 import { useNavigate } from 'react-router-dom'
-import Button from '../../components/button'
-import Input from '../../components/input'
-import ErrorBoundary from '../../components/errorBoundary'
+import LoginForm from '../../components/loginForm'
+
+const LOGIN_SUCCESS = 200
+const LOGIN_ERROR_MESSAGE = 'Login inválido'
 
 function Login() {
 	const api = new UserServices()
@@ -42,47 +43,32 @@ function Login() {
 	async function handleLogin(e) {
 		e.preventDefault()
 		setStatusCode('')
-		const response = await api.login(login)
-		setStatusCode(response)
-		if (response == 200) {
-			navigate('/home')
+
+		if (!login.email || !login.password) {
+			setStatusCode('Preencha todos os campos')
+			return
+		}
+		try {
+			const response = await api.login(login)
+			setStatusCode(response)
+			if (response == LOGIN_SUCCESS) {
+				navigate('/list')
+			}
+		} catch (error) {
+			setStatusCode('Erro ao tentar fazer login')
+			console.log('Error: ', error)
 		}
 	}
 
 	return (
 		<div className='login-container'>
-			<form onSubmit={handleLogin}>
-				<h1>Login</h1>
-				<ErrorBoundary>
-					<Input fields={formFields} />
-				</ErrorBoundary>
-
-				<div className='recall-forget'>
-					<label>
-						<input type='checkbox' /> Lembre de mim
-					</label>
-					<a href='/'>Esqueceu a senha?</a>
-				</div>
-
-				<Button
-					type='submit'
-					label='Efetura Login !!'
-				/>
-
-				{statusCode == '' || statusCode == 200 ? (
-					''
-				) : (
-					<div className='error-message'>
-						<p>Login inválido</p>
-					</div>
-				)}
-
-				<div className='signup-link'>
-					<p>
-						Não tem uma conta? <a href='/'>Cadastre-se</a>
-					</p>
-				</div>
-			</form>
+			<LoginForm
+				formFields={formFields}
+				handleLogin={handleLogin}
+				statusCode={statusCode}
+				LOGIN_SUCCESS={LOGIN_SUCCESS}
+				LOGIN_ERROR_MESSAGE={LOGIN_ERROR_MESSAGE}
+			/>
 		</div>
 	)
 }
