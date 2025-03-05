@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { jwtDecode } from 'jwt-decode'
 
 export default class UserServices {
 	constructor() {
@@ -11,13 +12,29 @@ export default class UserServices {
 		return this.axios.get('/user')
 	}
 
+	async getUserByEmail(email) {
+		const response = await this.axios
+			.get(`/user/email/${email}`)
+			.catch((error) => {
+				console.log('NOK ', error.response.data.message)
+				return {
+					status: error.status,
+					data: [{}],
+				}
+			})
+
+		return {
+			status: response.status,
+			data: [response.data],
+		}
+	}
+
 	async deleteUser(id) {
 		return this.axios.delete(`/user/${id}`)
 	}
 
 	async createNewUser(dados) {
 		dados.age = parseInt(dados.age)
-		console.log(dados)
 		return this.axios.post('/user', dados)
 	}
 
@@ -38,7 +55,18 @@ export default class UserServices {
 	}
 
 	usuarioAutenticado() {
-		return localStorage.getItem('token') != 'undefined' ? true : false
+		const token = localStorage.getItem('token')
+		if (this.isTokenValid(token)) {
+			return true
+		}
+
+		localStorage.removeItem('name')
+		localStorage.removeItem('email')
+		localStorage.removeItem('userid')
+		localStorage.removeItem('age')
+		localStorage.removeItem('token')
+
+		return false
 	}
 
 	async logout() {
@@ -47,5 +75,18 @@ export default class UserServices {
 		localStorage.removeItem('userid')
 		localStorage.removeItem('age')
 		localStorage.removeItem('token')
+	}
+
+	isTokenValid(token) {
+		if (!token) return false
+
+		try {
+			const decodedToken = jwtDecode(token)
+			const currentTime = Date.now() / 1000 // em segundos
+			return decodedToken.exp > currentTime
+		} catch (error) {
+			console.error('Token inválido', error)
+			return false
+		}
 	}
 }

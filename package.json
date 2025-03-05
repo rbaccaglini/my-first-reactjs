@@ -13,6 +13,7 @@
 	"dependencies": {
 		"@react-icons/all-files": "^4.1.0",
 		"axios": "^1.8.1",
+		"jwt-decode": "^4.0.0",
 		"prop-types": "^15.8.1",
 		"react": "^19.0.0",
 		"react-dom": "^19.0.0",
@@ -37,6 +38,6 @@
 		"vite": "^6.2.0"
 	},
 	"engines": {
-		"node": ">=21.0.0"
+		"node": ">=22.0.0"
 	}
 }
