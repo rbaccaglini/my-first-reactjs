@@ -1,96 +1,34 @@
-import { TopHeader, Container, Left, Right, TopContainer, Image } from './style'
-import './style.css'
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import Trash from '../../assets/trash.svg'
-import Find from '../../assets/find_search_icon.svg'
+import { useState, useEffect } from 'react'
+import {
+	Box,
+	TextField,
+	Button,
+	Typography,
+	Card,
+	CardContent,
+	CardActions,
+	IconButton,
+	Grid2 as Grid,
+} from '@mui/material'
+import { Delete, Edit, Search } from '@mui/icons-material'
+
 import UserServices from '../../services/api'
-import UserCard from '../../components/usercard'
-import UserForm from '../../components/userForm'
+import Header from '../../components/internalHeader'
 
-function List() {
+const List = () => {
 	const api = new UserServices()
-	const navigate = useNavigate()
 
-	const [errorFind, setErrorFind] = useState('')
-	const [find, setFind] = useState('')
+	const [searchEmail, setSearchEmail] = useState('')
+	const [formData, setFormData] = useState({
+		name: '',
+		age: '',
+		email: '',
+		password: '',
+	})
 	const [users, setUsers] = useState([])
 	const [errMessage, setErrMessage] = useState('')
-	const [formData, setFormData] = useState([
-		{
-			name: '',
-			age: '',
-			email: '',
-			password: '',
-		},
-	])
 
-	const formFields = [
-		{
-			placeholder: 'Nome',
-			name: 'name',
-			type: 'text',
-			value: formData.name,
-			func: handleLoginChange,
-		},
-		{
-			placeholder: 'Idade',
-			name: 'age',
-			type: 'number',
-			value: formData.age,
-			func: handleLoginChange,
-		},
-		{
-			placeholder: 'Email',
-			name: 'email',
-			type: 'email',
-			value: formData.email,
-			func: handleLoginChange,
-		},
-		{
-			placeholder: 'Senha',
-			name: 'password',
-			type: 'password',
-			value: formData.password,
-			func: handleLoginChange,
-		},
-	]
-
-	async function getUsers() {
-		const usersFromApi = await api.getUsers()
-		setUsers(usersFromApi.data)
-	}
-
-	async function getUserByEmail(email) {
-		if (email == '') {
-			getUsers()
-			return
-		}
-
-		const user = await api.getUserByEmail(email)
-		setUsers(user.data)
-		if (user.status !== 200) {
-			setErrorFind('Usuário não encontrado')
-		}
-	}
-
-	useEffect(() => {
-		getUsers()
-	}, [])
-
-	async function deleteUser(id) {
-		await api
-			.deleteUser(id)
-			.then(() => {
-				getUsers()
-				setErrMessage('')
-			})
-			.catch((error) => {
-				setErrMessage(error)
-			})
-	}
-
-	async function createUser() {
+	const handleAddUser = async () => {
 		setErrMessage('')
 		await api
 			.createNewUser(formData)
@@ -103,67 +41,193 @@ function List() {
 			})
 	}
 
-	function handleLoginChange(e) {
-		const { name, value } = e.target
-		setFormData({ ...formData, [name]: value })
+	const handleDeleteUser = async (id) => {
+		await api
+			.deleteUser(id)
+			.then(() => {
+				getUsers()
+				setErrMessage('')
+			})
+			.catch((error) => {
+				setErrMessage(error)
+			})
 	}
 
-	function handleFindChange(e) {
-		setFind(e.target.value)
-		console.log(find)
+	const handleEditUser = (id) => {
+		const userToEdit = users.find((user) => user.id === id)
+		if (userToEdit) {
+			setFormData(userToEdit)
+			setUsers(users.filter((user) => user.id !== id))
+		}
 	}
 
-	function logout() {
-		api.logout()
-		navigate('/login')
-		return null
+	const getUsers = async () => {
+		const usersFromApi = await api.getUsers()
+		setUsers(usersFromApi.data)
 	}
+
+	const getUserByEmail = async (email) => {
+		if (email == '') {
+			getUsers()
+			return
+		}
+
+		console.log(email)
+
+		const user = await api.getUserByEmail(email)
+		setUsers(user.data)
+		if (user.status !== 200) {
+			setErrMessage('Usuário não encontrado')
+		}
+	}
+
+	useEffect(() => {
+		getUsers()
+	}, [])
 
 	return (
-		<>
-			<TopHeader>
-				<TopContainer>
-					<h3>Consulta de Usuários</h3>
-					<input
-						type='text'
-						placeholder='Pesquisar email'
-						name='find-email'
-						value={find}
-						onChange={handleFindChange}
-					/>
-					<button
-						type='button'
-						onClick={() => getUserByEmail(find)}
+		<div>
+			{/* Header */}
+			<Header />
+
+			<Grid
+				container
+				spacing={2}
+				sx={{ padding: 2 }}
+			>
+				{/* Left Side: Form */}
+				<Grid
+					item
+					size={{ xs: 12, md: 3 }}
+				>
+					<Typography
+						variant='h6'
+						gutterBottom
 					>
-						<Image
-							src={Find}
-							alt=''
-						/>
-					</button>
-				</TopContainer>
-			</TopHeader>
-			<Container>
-				<Left>
-					<UserForm
-						formFields={formFields}
-						createUser={createUser}
-						logout={logout}
-						errMessage={errMessage}
+						Novo Usuário
+					</Typography>
+					<TextField
+						fullWidth
+						label='Nome'
+						type='text'
+						variant='outlined'
+						value={formData.name}
+						onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+						sx={{ marginBottom: 2 }}
 					/>
-				</Left>
-				<Right>
-					{errorFind == '' ? (
-						<UserCard
-							users={users}
-							func={deleteUser}
-							img={Trash}
-						/>
-					) : (
-						<div className='error'>{errorFind}</div>
-					)}
-				</Right>
-			</Container>
-		</>
+					<TextField
+						fullWidth
+						label='Idade'
+						type='number'
+						variant='outlined'
+						value={formData.age}
+						onChange={(e) => setFormData({ ...formData, age: e.target.value })}
+						sx={{ marginBottom: 2 }}
+					/>
+					<TextField
+						fullWidth
+						label='Email'
+						type='email'
+						variant='outlined'
+						value={formData.email}
+						onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+						sx={{ marginBottom: 2 }}
+					/>
+					<TextField
+						fullWidth
+						label='Senha'
+						type='password'
+						variant='outlined'
+						value={formData.password}
+						onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+						sx={{ marginBottom: 2 }}
+					/>
+					<Button
+						variant='contained'
+						color='primary'
+						onClick={handleAddUser}
+					>
+						Adicionar
+					</Button>
+					<Typography
+						variant='h6'
+						gutterBottom
+					>
+						{errMessage}
+					</Typography>
+				</Grid>
+
+				{/* Right Side: User List */}
+				<Grid
+					item
+					size={{ xs: 12, md: 9 }}
+				>
+					<Box
+						display='flex'
+						justifyContent='space-between'
+						alignItems='center'
+						width='100%'
+						sx={{
+							flexDirection: 'row', // Permite empilhar os elementos verticalmente
+							alignItems: 'stretch', // Estica os elementos horizontalmente
+						}}
+					>
+						{/* Busca por e-mail */}
+						<Typography
+							variant='h6'
+							gutterBottom
+						>
+							Lista de Usuários ({users.length})
+						</Typography>
+						<Box
+							display='flex'
+							alignItems='center'
+						>
+							<TextField
+								label='Buscar por e-mail'
+								variant='outlined'
+								size='small'
+								value={searchEmail}
+								onChange={(e) => setSearchEmail(e.target.value)}
+								sx={{ marginRight: 2 }}
+							/>
+							<IconButton
+								color='warning'
+								onClick={() => getUserByEmail(searchEmail)}
+							>
+								<Search />
+							</IconButton>
+						</Box>
+					</Box>
+					{users.map((user) => (
+						<Card
+							key={user.id}
+							sx={{ marginBottom: 2 }}
+						>
+							<CardContent>
+								<Typography variant='body1'>Nome: {user.name}</Typography>
+								<Typography variant='body1'>Idade: {user.age}</Typography>
+								<Typography variant='body1'>Email: {user.email}</Typography>
+							</CardContent>
+							<CardActions>
+								<IconButton
+									color='primary'
+									onClick={() => handleEditUser(user.id)}
+								>
+									<Edit />
+								</IconButton>
+								<IconButton
+									color='secondary'
+									onClick={() => handleDeleteUser(user.id)}
+								>
+									<Delete />
+								</IconButton>
+							</CardActions>
+						</Card>
+					))}
+				</Grid>
+			</Grid>
+		</div>
 	)
 }
 

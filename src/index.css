@@ -1,10 +1,19 @@
 * {
 	box-sizing: border-box;
 	font-family: 'Poppins', serif;
-	text-shadow: #000 1px 1px;
+	color: #3b42cd;
+}
+
+.header-title {
 	color: #fff;
 }
 
+.test-header {
+	height: auto;
+	padding: 20px;
+}
+
+/*
 body {
 	background: linear-gradient(180deg, #363467, 100%, rgba(30, 29, 79, 0.8) 100%);
 	justify-content: center;
@@ -21,4 +30,4 @@ body {
 	background: linear-gradient(180deg, #363467, 100%, rgba(30, 29, 79, 0.8) 100%);
 	background-size: cover;
 	background-position: center;
-}
+} */
