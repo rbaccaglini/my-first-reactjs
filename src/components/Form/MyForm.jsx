@@ -1,18 +1,12 @@
+import Proptypes from 'prop-types'
+
 import InputAdornment from '@mui/material/InputAdornment'
 import TextField from '@mui/material/TextField'
-import {
-	AccountCircle,
-	EmailRounded,
-	NumbersRounded,
-	PasswordRounded,
-	Visibility,
-	VisibilityOff,
-	SendRounded,
-} from '@mui/icons-material'
+import { Visibility, VisibilityOff, SendRounded } from '@mui/icons-material'
 import { Button, Grid2, IconButton } from '@mui/material'
 import { useState } from 'react'
 
-export default function Test() {
+const MyForm = ({ lstFields, submitFunc, fieldFunc }) => {
 	const [showPassword, setShowPassword] = useState(false)
 
 	const handleClickShowPassword = () => setShowPassword((show) => !show)
@@ -21,33 +15,6 @@ export default function Test() {
 		setShowPassword((show) => !show)
 	}
 	const handleMouseUpPassword = (event) => event.preventDefault()
-
-	const lstFields = [
-		{
-			id: 'input-with-icon-textfield-name',
-			label: 'Name',
-			type: 'text',
-			startAdornment: <AccountCircle />,
-		},
-		{
-			id: 'input-with-icon-textfield-email',
-			label: 'Email',
-			type: 'email',
-			startAdornment: <EmailRounded />,
-		},
-		{
-			id: 'input-with-icon-textfield-number',
-			label: 'Age',
-			type: 'number',
-			startAdornment: <NumbersRounded />,
-		},
-		{
-			id: 'input-with-icon-textfield-password',
-			label: 'Password',
-			type: 'password',
-			startAdornment: <PasswordRounded />,
-		},
-	]
 
 	const passwordFieldType = showPassword ? 'text' : 'password'
 
@@ -64,6 +31,8 @@ export default function Test() {
 				>
 					<TextField
 						type={field.type === 'password' ? passwordFieldType : field.type}
+						label={field.label}
+						name={field.name}
 						fullWidth
 						slotProps={{
 							input: {
@@ -87,6 +56,7 @@ export default function Test() {
 							},
 						}}
 						variant='standard'
+						onChange={(e) => fieldFunc(e, field.id)}
 					/>
 				</Grid2>
 			))}
@@ -96,6 +66,7 @@ export default function Test() {
 					variant='contained'
 					endIcon={<SendRounded />}
 					fullWidth
+					onClick={submitFunc}
 				>
 					Send
 				</Button>
@@ -103,3 +74,19 @@ export default function Test() {
 		</Grid2>
 	)
 }
+
+MyForm.propTypes = {
+	lstFields: Proptypes.arrayOf(
+		Proptypes.shape({
+			id: Proptypes.string.isRequired,
+			name: Proptypes.string.isRequired,
+			label: Proptypes.string.isRequired,
+			type: Proptypes.string,
+			startAdornment: Proptypes.element,
+		}),
+	).isRequired,
+	submitFunc: Proptypes.func.isRequired,
+	fieldFunc: Proptypes.func,
+}
+
+export default MyForm
